@@ -1,7 +1,6 @@
 package com.github.windsekirun.richcrashcollector;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
@@ -21,22 +20,19 @@ import java.io.Writer;
  */
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
-    private CrashHandler instance;
-
+    private static CrashHandler instance;
     private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
     private CrashConfig crashConfig;
-    private Context context;
     private Calendar now;
 
-    public static CrashHandler getInstance(Context context, CrashConfig config) {
+    static CrashHandler getInstance(CrashConfig config) {
         if (instance == null)
-            instance = new CrashHandler(context, config);
+            instance = new CrashHandler(config);
 
         return instance;
     }
 
-    private CrashHandler(Context context, CrashConfig config) {
-        this.context = context;
+    private CrashHandler(CrashConfig config) {
         this.crashConfig = config;
         now = Calendar.getInstance();
         defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
@@ -46,12 +42,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(Thread t, Throwable e) {
         now = Calendar.getInstance();
         if (!handleException(e) && defaultExceptionHandler != null) {
-            defaultExceptionHandler.uncaughtException(t, e);
-
+            defaultExceptionHandler.uncaughtException(t, null);
         } else {
-            SystemClock.sleep(3000);
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
+            e.printStackTrace();
         }
     }
 
@@ -64,9 +57,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return true;
     }
 
+    @SuppressWarnings("EmptyCatchBlock")
+    @SuppressLint("InlinedApi")
     private String writeLogIntoMarkdown(Throwable ex) throws PackageManager.NameNotFoundException {
         StringBuilder builder = new StringBuilder();
-        PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
         SimpleDateFormat dateFormat = new SimpleDateFormat(crashConfig.getTimeFormat());
 
         Writer result = new StringWriter();
@@ -84,19 +78,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         String stackTrace = result.toString();
 
         builder.append("## Crash Log in ")
-                .append(context.getPackageName())
+                .append(crashConfig.getPackageName())
                 .append(getLineBreak())
                 .append("### Application Info")
                 .append(getLineBreak())
                 .append("* Package Name: **")
-                .append(context.getPackageName())
+                .append(crashConfig.getPackageName())
                 .append("**")
                 .append(getLineBreak())
                 .append("* Version: **")
-                .append(packageInfo.versionName)
-                .append("(")
-                .append(packageInfo.versionCode)
-                .append(")")
+                .append(crashConfig.getVersionStr())
                 .append("**")
                 .append(getLineBreak())
                 .append(getLineBreak());
