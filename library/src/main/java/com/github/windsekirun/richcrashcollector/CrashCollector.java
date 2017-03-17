@@ -10,12 +10,8 @@ import android.content.Context;
  */
 
 public class CrashCollector {
-    private static boolean isWorking = BuildConfig.DEBUG;
 
     public static void initCrashCollector(Application app) {
-        if (!isWorking)
-            return;
-
         Context context = app.getApplicationContext();
         int pid = android.os.Process.myPid();
 

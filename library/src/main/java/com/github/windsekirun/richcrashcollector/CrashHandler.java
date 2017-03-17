@@ -1,5 +1,7 @@
 package com.github.windsekirun.richcrashcollector;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.os.SystemClock;
 
 /**
@@ -9,7 +11,15 @@ import android.os.SystemClock;
  */
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
+    private CrashHandler instance;
+
     private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
+    private CrashConfig crashConfig;
+    private Context context;
+
+    public CrashHandler(Context context) {
+
+    }
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
@@ -29,5 +39,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         // TODO: Save log, or device.. some info to files;
         return true;
+    }
+
+    private String writeLogIntoMarkdown(Throwable ex) {
+        StringBuilder builder = new StringBuilder();
+        PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
+
+        builder.append("## Crash Log in ")
+                .append()
     }
 }
