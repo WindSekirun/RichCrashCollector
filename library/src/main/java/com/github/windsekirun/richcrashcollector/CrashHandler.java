@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
-import android.os.Environment;
 
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -24,7 +26,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
     private CrashConfig crashConfig;
     private Calendar now;
-    private String logLocation;
 
     static CrashHandler getInstance(CrashConfig config) {
         if (instance == null)
@@ -49,18 +50,54 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    private boolean handleException(Throwable ex) {
+    private boolean handleException(final Throwable ex) {
         if (ex == null) {
             return false;
         }
 
-        // TODO: Save log, or device.. some info to files;
+        new Thread() {
+            @Override
+            public void run() {
+                saveLocal(writeLogIntoMarkdown(ex));
+            }
+        }.start();
         return true;
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void saveLocal(String message) {
+        String fileName = getFileName();
+        File file = new File(crashConfig.getLogLocation(), fileName);
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                file.setWritable(Boolean.TRUE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file, true);
+            fos.write(message.getBytes());
+            fos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null)
+                    fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @SuppressWarnings("EmptyCatchBlock")
     @SuppressLint("InlinedApi")
-    private String writeLogIntoMarkdown(Throwable ex) throws PackageManager.NameNotFoundException {
+    private String writeLogIntoMarkdown(Throwable ex) {
         StringBuilder builder = new StringBuilder();
         SimpleDateFormat dateFormat = new SimpleDateFormat(crashConfig.getTimeFormat());
 
@@ -155,8 +192,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return "crash_" + getTimeForPrint() + ".log";
     }
 
-    public static String getTimeForPrint() {
-        return new SimpleDateFormat("yyyyMMddhhmmss").format(System.currentTimeMillis());
+    private static String getTimeForPrint() {
+        return new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
     }
 
     private String getLineBreak() {
