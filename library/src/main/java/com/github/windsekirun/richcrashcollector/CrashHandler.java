@@ -22,7 +22,7 @@ import java.io.Writer;
 
 class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static CrashHandler instance;
-    private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
+    private Thread.UncaughtExceptionHandler defaultExceptionHandler;
     private CrashConfig crashConfig;
     private Calendar now;
 

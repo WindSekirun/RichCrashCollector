@@ -10,6 +10,7 @@ import android.content.Context;
  * Created by pyxis on 2017. 3. 17..
  */
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class CrashCollector {
 
     public static void initCrashCollector(Application app) {
@@ -23,8 +24,7 @@ public class CrashCollector {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.getRunningAppProcesses().stream()
                 .filter(process -> process.pid == pid)
-                .filter(process -> process.processName.equalsIgnoreCase(context.getPackageName())).forEach(process -> {
-            Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance(config));
-        });
+                .filter(process -> process.processName.equalsIgnoreCase(context.getPackageName()))
+                .forEach(process -> Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance(config)));
     }
 }
