@@ -21,7 +21,7 @@ public class MainApplication extends Application {
                 .setLogLevel(LogLevel.STACKTRACE)
                 .setLogLocation(getExternalFilesDir("crash").toString())
                 .setPackageName(getPackageName())
-                .setTimeFormat("yyyy-MM-dd (e) a hh:mm:ss.SSS")
+                .setTimeFormat("yyyy-MM-dd (E) a hh:mm:ss.SSS")
                 .setVersionStr(VersionStrUtils.getVersionStr(this))
                 .build(this);
 

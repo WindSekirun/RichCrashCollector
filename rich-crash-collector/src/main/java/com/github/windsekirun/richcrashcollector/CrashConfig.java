@@ -56,7 +56,7 @@ public class CrashConfig {
     public static class Builder {
         private boolean displayDeviceInfo = true;
         private LogLevel logLevel = LogLevel.MESSAGE;
-        private String timeFormat = "yyyy-MM-dd (e) a hh:mm:ss.SSS";
+        private String timeFormat = "yyyy-MM-dd (E) a hh:mm:ss.SSS";
         private String packageName = "com.github.windsekirun.richcrashcollector";
         private String versionStr = "1.0.0(1)";
         private String logLocation = null;

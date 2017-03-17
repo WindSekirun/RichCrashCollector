@@ -42,16 +42,12 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         now = Calendar.getInstance();
-        if (!handleException(e) && defaultExceptionHandler != null) {
-            defaultExceptionHandler.uncaughtException(t, null);
-        } else {
-            e.printStackTrace();
-        }
+        handleException(e);
     }
 
-    private boolean handleException(final Throwable ex) {
+    private void handleException(final Throwable ex) {
         if (ex == null) {
-            return false;
+            return;
         }
 
         new Thread() {
@@ -60,7 +56,6 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
                 saveLocal(writeLogIntoMarkdown(ex));
             }
         }.start();
-        return true;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -92,6 +87,8 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
                 e.printStackTrace();
             }
         }
+
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     @SuppressWarnings("EmptyCatchBlock")
@@ -133,21 +130,22 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
             builder.append("### Device Info")
                     .append(getLineBreak())
                     .append("* Device: **")
-                    .append(Build.DEVICE)
+                    .append(Build.MODEL)
                     .append(" (a.k.a ")
                     .append(Build.PRODUCT)
                     .append(" or ")
-                    .append(Build.MODEL)
+                    .append(Build.DEVICE)
                     .append(")**")
                     .append(getLineBreak())
                     .append("* Version: **")
-                    .append(Build.VERSION.CODENAME)
+                    .append(Build.VERSION.SDK)
                     .append(" (")
                     .append(Build.VERSION.SDK_INT)
                     .append(")**")
                     .append(getLineBreak())
                     .append("* Manufacturer: **")
                     .append(Build.MANUFACTURER)
+                    .append("**")
                     .append(getLineBreak())
                     .append(getLineBreak());
         }
@@ -172,6 +170,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
             builder.append("#### Stack Trace")
                     .append(getLineBreak())
                     .append("````")
+                    .append(getLineBreak())
                     .append(stackTrace)
                     .append("````")
                     .append(getLineBreak())
