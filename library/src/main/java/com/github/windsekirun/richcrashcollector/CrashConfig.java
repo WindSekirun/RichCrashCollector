@@ -12,14 +12,9 @@ public class CrashConfig {
     private boolean displayDeviceInfo;
     private LogLevel logLevel = LogLevel.MESSAGE;
     private String timeFormat = null;
-    private String logLocation = null;
 
     public LogLevel getLogLevel() {
         return logLevel;
-    }
-
-    public String getLogLocation() {
-        return logLocation;
     }
 
     public String getTimeFormat() {
