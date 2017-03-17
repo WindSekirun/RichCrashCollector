@@ -10,7 +10,8 @@ import com.github.windsekirun.richcrashcollector.item.LogLevel;
  * Created by pyxis on 2017. 3. 17..
  */
 
-class CrashConfig {
+@SuppressWarnings("WeakerAccess")
+public class CrashConfig {
     private boolean displayDeviceInfo;
     private LogLevel logLevel;
     private String timeFormat;
@@ -52,7 +53,7 @@ class CrashConfig {
     }
 
     @SuppressWarnings({"ConstantConditions", "unused"})
-    static class Builder {
+    public static class Builder {
         private boolean displayDeviceInfo = true;
         private LogLevel logLevel = LogLevel.MESSAGE;
         private String timeFormat = "yyyy-MM-dd (e) a hh:mm:ss.SSS";
