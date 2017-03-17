@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+def moduleVersionCode  = 1
+def moduleVersionName = "1.0.1"
+
+File versionFile = file('src/main/java/com/github/windsekirun/richcrashcollector/Version.java')
+versionFile.eachLine { line ->
+    def group = (line =~ /versionCode( )*=( )*[0-9]+/)
+    if(group.hasGroup() && group.size() > 0){
+        moduleVersionCode = group[0][0].toString().replaceAll("versionCode( )*=( )*", "")
+    }
+
+    group = (line =~ /versionName( )*=( )*\".*\"/)
+    if(group.hasGroup() && group.size() > 0){
+        moduleVersionName = group[0][0].toString().replaceAll("(versionName( )*=( )*)|\"", "")
+    }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+retrolambda {
+    javaVersion JavaVersion.VERSION_1_6
+    defaultMethods false
+    incremental true
+}
+
+dependencies {
+}
+
+task copyAAR(type: Copy) {
+    from('build/outputs/aar')
+    into('aar')
+    include(project.name + '-release.aar')
+}
