@@ -5,7 +5,7 @@ import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
-import android.os.SystemClock;
+import android.os.Environment;
 
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
 
@@ -24,6 +24,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
     private CrashConfig crashConfig;
     private Calendar now;
+    private String logLocation;
 
     static CrashHandler getInstance(CrashConfig config) {
         if (instance == null)
@@ -150,6 +151,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return builder.toString();
     }
 
+    private String getFileName() {
+        return "crash_" + getTimeForPrint() + ".log";
+    }
+
+    public static String getTimeForPrint() {
+        return new SimpleDateFormat("yyyyMMddhhmmss").format(System.currentTimeMillis());
+    }
 
     private String getLineBreak() {
         return System.getProperty("line.separator");

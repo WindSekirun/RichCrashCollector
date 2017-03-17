@@ -1,5 +1,7 @@
 package com.github.windsekirun.richcrashcollector;
 
+import android.content.Context;
+
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
 
 /**
@@ -14,6 +16,7 @@ public class CrashConfig {
     private String timeFormat;
     private String versionStr;
     private String packageName;
+    private String logLocation;
 
     public String getPackageName() {
         return packageName;
@@ -35,20 +38,26 @@ public class CrashConfig {
         return versionStr;
     }
 
+    public String getLogLocation() {
+        return logLocation;
+    }
+
     private CrashConfig(Builder builder) {
         this.displayDeviceInfo = builder.displayDeviceInfo;
         this.logLevel = builder.logLevel;
         this.timeFormat = builder.timeFormat;
         this.packageName = builder.packageName;
         this.versionStr = builder.versionStr;
+        this.logLocation = builder.logLocation;
     }
 
     public static class Builder {
-        private boolean displayDeviceInfo = false;
+        private boolean displayDeviceInfo = true;
         private LogLevel logLevel = LogLevel.MESSAGE;
         private String timeFormat = "yyyy-MM-dd (e) a hh:mm:ss.SSS";
-        private String packageName;
-        private String versionStr;
+        private String packageName = "com.github.windsekirun.richcrashcollector";
+        private String versionStr = "1.0.0(1)";
+        private String logLocation = null;
 
         public Builder setDisplayDeviceInfo(boolean displayDeviceInfo) {
             this.displayDeviceInfo = displayDeviceInfo;
@@ -75,7 +84,15 @@ public class CrashConfig {
             return this;
         }
 
-        public CrashConfig build() {
+        public Builder setLogLocation(String logLocation) {
+            this.logLocation = logLocation;
+            return this;
+        }
+
+        public CrashConfig build(Context context) {
+            if (logLocation == null)
+                logLocation = context.getExternalFilesDir("crash").toString();
+
             CrashConfig crashConfig = new CrashConfig(this);
             return crashConfig;
         }
