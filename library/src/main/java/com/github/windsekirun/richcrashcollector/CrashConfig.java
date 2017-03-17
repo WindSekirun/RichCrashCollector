@@ -24,5 +24,37 @@ public class CrashConfig {
     public boolean isDisplayDeviceInfo() {
         return displayDeviceInfo;
     }
+
+    private CrashConfig(Builder builder) {
+        this.displayDeviceInfo = builder.displayDeviceInfo;
+        this.logLevel = builder.logLevel;
+        this.timeFormat = builder.timeFormat;
+    }
+
+    public static class Builder {
+        private boolean displayDeviceInfo;
+        private LogLevel logLevel = LogLevel.MESSAGE;
+        private String timeFormat = null;
+
+        public Builder setDisplayDeviceInfo(boolean displayDeviceInfo) {
+            this.displayDeviceInfo = displayDeviceInfo;
+            return this;
+        }
+
+        public Builder setLogLevel(LogLevel logLevel) {
+            this.logLevel = logLevel;
+            return this;
+        }
+
+        public Builder setTimeFormat(String timeFormat) {
+            this.timeFormat = timeFormat;
+            return this;
+        }
+
+        public CrashConfig build() {
+            CrashConfig crashConfig = new CrashConfig(this);
+            return crashConfig;
+        }
+    }
 }
 
