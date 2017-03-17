@@ -13,7 +13,7 @@ import android.content.Context;
 public class CrashCollector {
 
     public static void initCrashCollector(Application app) {
-        initCrashCollector(app, new CrashConfig.Builder().build());
+        initCrashCollector(app, new CrashConfig.Builder().build(app.getApplicationContext()));
     }
 
     public static void initCrashCollector(Application app, CrashConfig config) {
@@ -21,12 +21,10 @@ public class CrashCollector {
         int pid = android.os.Process.myPid();
 
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo process : activityManager.getRunningAppProcesses()) {
-            if (process.pid == pid) {
-                if (process.processName.equalsIgnoreCase(context.getPackageName())) {
-                    Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance(context, config));
-                }
-            }
-        }
+        activityManager.getRunningAppProcesses().stream()
+                .filter(process -> process.pid == pid)
+                .filter(process -> process.processName.equalsIgnoreCase(context.getPackageName())).forEach(process -> {
+            Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance(config));
+        });
     }
 }

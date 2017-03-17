@@ -8,5 +8,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
+retrolambda {
+    javaVersion JavaVersion.VERSION_1_6
+    defaultMethods false
+    incremental true
+}
+
 dependencies {
 }

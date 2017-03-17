@@ -1,7 +1,6 @@
 package com.github.windsekirun.richcrashcollector;
 
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -21,7 +20,7 @@ import java.io.Writer;
  * Created by pyxis on 2017. 3. 17..
  */
 
-public class CrashHandler implements Thread.UncaughtExceptionHandler {
+class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static CrashHandler instance;
     private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
     private CrashConfig crashConfig;

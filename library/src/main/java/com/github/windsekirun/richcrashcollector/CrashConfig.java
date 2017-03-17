@@ -10,7 +10,7 @@ import com.github.windsekirun.richcrashcollector.item.LogLevel;
  * Created by pyxis on 2017. 3. 17..
  */
 
-public class CrashConfig {
+class CrashConfig {
     private boolean displayDeviceInfo;
     private LogLevel logLevel;
     private String timeFormat;
@@ -18,27 +18,27 @@ public class CrashConfig {
     private String packageName;
     private String logLocation;
 
-    public String getPackageName() {
+    String getPackageName() {
         return packageName;
     }
 
-    public LogLevel getLogLevel() {
+    LogLevel getLogLevel() {
         return logLevel;
     }
 
-    public String getTimeFormat() {
+    String getTimeFormat() {
         return timeFormat;
     }
 
-    public boolean isDisplayDeviceInfo() {
+    boolean isDisplayDeviceInfo() {
         return displayDeviceInfo;
     }
 
-    public String getVersionStr() {
+    String getVersionStr() {
         return versionStr;
     }
 
-    public String getLogLocation() {
+    String getLogLocation() {
         return logLocation;
     }
 
@@ -51,7 +51,8 @@ public class CrashConfig {
         this.logLocation = builder.logLocation;
     }
 
-    public static class Builder {
+    @SuppressWarnings({"ConstantConditions", "unused"})
+    static class Builder {
         private boolean displayDeviceInfo = true;
         private LogLevel logLevel = LogLevel.MESSAGE;
         private String timeFormat = "yyyy-MM-dd (e) a hh:mm:ss.SSS";
@@ -89,12 +90,11 @@ public class CrashConfig {
             return this;
         }
 
-        public CrashConfig build(Context context) {
+        CrashConfig build(Context context) {
             if (logLocation == null)
                 logLocation = context.getExternalFilesDir("crash").toString();
 
-            CrashConfig crashConfig = new CrashConfig(this);
-            return crashConfig;
+            return new CrashConfig(this);
         }
     }
 }
