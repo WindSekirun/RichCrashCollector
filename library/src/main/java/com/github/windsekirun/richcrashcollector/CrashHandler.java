@@ -28,7 +28,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Context context;
     private Calendar now;
 
-    public CrashHandler getInstance(Context context, CrashConfig config) {
+    public static CrashHandler getInstance(Context context, CrashConfig config) {
         if (instance == null)
             instance = new CrashHandler(context, config);
 
@@ -39,6 +39,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         this.context = context;
         this.crashConfig = config;
         now = Calendar.getInstance();
+        defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
     }
 
     @Override
