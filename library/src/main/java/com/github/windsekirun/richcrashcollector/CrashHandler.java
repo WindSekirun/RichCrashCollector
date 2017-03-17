@@ -26,15 +26,27 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Thread.UncaughtExceptionHandler defaultExceptionHandler; // we need this object if CrashHandler doesn't collect logs properly
     private CrashConfig crashConfig;
     private Context context;
+    private Calendar now;
 
-    public CrashHandler(Context context) {
+    public CrashHandler getInstance(Context context, CrashConfig config) {
+        if (instance == null)
+            instance = new CrashHandler(context, config);
 
+        return instance;
+    }
+
+    private CrashHandler(Context context, CrashConfig config) {
+        this.context = context;
+        this.crashConfig = config;
+        now = Calendar.getInstance();
     }
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
+        now = Calendar.getInstance();
         if (!handleException(e) && defaultExceptionHandler != null) {
             defaultExceptionHandler.uncaughtException(t, e);
+
         } else {
             SystemClock.sleep(3000);
             android.os.Process.killProcess(android.os.Process.myPid());
@@ -54,9 +66,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private String writeLogIntoMarkdown(Throwable ex) throws PackageManager.NameNotFoundException {
         StringBuilder builder = new StringBuilder();
         PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-        Calendar now = Calendar.getInstance();
-        String format = crashConfig.getTimeFormat() != null ? crashConfig.getTimeFormat() : "yyyy-MM-dd (e) a hh:mm:ss.SSS";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(crashConfig.getTimeFormat());
 
         Writer result = new StringWriter();
         PrintWriter printWriter = new PrintWriter(result);
@@ -140,6 +150,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
 
         builder.append("Send this document to Developers, it will help so much!")
+                .append(getLineBreak())
                 .append(getLineBreak())
                 .append("Powered by [RichCrashCollector](https://github.com/pyxisdev/RichCrashCollector)")
                 .append(getLineBreak());

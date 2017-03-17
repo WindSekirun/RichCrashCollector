@@ -10,8 +10,8 @@ import com.github.windsekirun.richcrashcollector.item.LogLevel;
 
 public class CrashConfig {
     private boolean displayDeviceInfo;
-    private LogLevel logLevel = LogLevel.MESSAGE;
-    private String timeFormat = null;
+    private LogLevel logLevel;
+    private String timeFormat;
 
     public LogLevel getLogLevel() {
         return logLevel;
@@ -32,9 +32,9 @@ public class CrashConfig {
     }
 
     public static class Builder {
-        private boolean displayDeviceInfo;
+        private boolean displayDeviceInfo = false;
         private LogLevel logLevel = LogLevel.MESSAGE;
-        private String timeFormat = null;
+        private String timeFormat = "yyyy-MM-dd (e) a hh:mm:ss.SSS";
 
         public Builder setDisplayDeviceInfo(boolean displayDeviceInfo) {
             this.displayDeviceInfo = displayDeviceInfo;
