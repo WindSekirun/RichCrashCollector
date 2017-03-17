@@ -45,4 +45,9 @@ task copyAAR(type: Copy) {
     from('build/outputs/aar')
     into('aar')
     include(project.name + '-release.aar')
+    rename(project.name + '-release.aar', project.name + '.aar')
+}
+
+afterEvaluate {
+    assembleDebug.dependsOn copyAAR
 }
