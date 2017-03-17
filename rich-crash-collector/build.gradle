@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 def moduleVersionCode  = 1
 def moduleVersionName = "1.0.1"
@@ -26,17 +25,8 @@ android {
         targetSdkVersion 25
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_6
-    defaultMethods false
-    incremental true
-}
 
 dependencies {
 }

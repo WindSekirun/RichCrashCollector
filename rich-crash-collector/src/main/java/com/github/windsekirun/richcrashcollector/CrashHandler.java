@@ -188,7 +188,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private String getFileName() {
-        return "crash_" + getTimeForPrint() + ".log";
+        return "crash_" + getTimeForPrint() + ".md";
     }
 
     private static String getTimeForPrint() {
