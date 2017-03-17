@@ -91,7 +91,7 @@ public class CrashConfig {
             return this;
         }
 
-        CrashConfig build(Context context) {
+        public CrashConfig build(Context context) {
             if (logLocation == null)
                 logLocation = context.getExternalFilesDir("crash").toString();
 
