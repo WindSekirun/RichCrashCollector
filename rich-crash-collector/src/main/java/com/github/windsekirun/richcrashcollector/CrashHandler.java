@@ -178,12 +178,6 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
                     .append(getLineBreak());
         }
 
-        builder.append("Send this document to Developers, it will help so much!")
-                .append(getLineBreak())
-                .append(getLineBreak())
-                .append("Powered by [RichCrashCollector](https://github.com/pyxisdev/RichCrashCollector)")
-                .append(getLineBreak());
-
         return builder.toString();
     }
 
