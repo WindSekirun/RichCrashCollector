@@ -6,7 +6,7 @@ Auto write crash-report documents (markdown) when app is force closed.
 * Generate code block of Stacktrace
 * Customize options to produce crash-report documents
 * Lightweight(11KB) library
-* Using Markdown which Comfortable document format, quiet small document (1.5KB, all options provided as 'true')
+* Customize format of crash-report documents (Now support Markdown, HTML)
 
 ### Sample
 Provide 'sample' module
@@ -45,7 +45,8 @@ Provide 'sample' module
 5. That's it! Crash log will saved in LogLocation.
 
 ### Document format
-Markdown.
+* Markdown
+* HTML (v 1.1.0 available)
 
 ##### Example
 ````
