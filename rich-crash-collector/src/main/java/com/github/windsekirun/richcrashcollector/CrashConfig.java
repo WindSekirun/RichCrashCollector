@@ -21,31 +21,31 @@ public class CrashConfig {
     private String logLocation;
     private DocumentType documentType;
 
-    String getPackageName() {
+    public String getPackageName() {
         return packageName;
     }
 
-    LogLevel getLogLevel() {
+    public LogLevel getLogLevel() {
         return logLevel;
     }
 
-    String getTimeFormat() {
+    public String getTimeFormat() {
         return timeFormat;
     }
 
-    boolean isDisplayDeviceInfo() {
+    public boolean isDisplayDeviceInfo() {
         return displayDeviceInfo;
     }
 
-    String getVersionStr() {
+    public String getVersionStr() {
         return versionStr;
     }
 
-    String getLogLocation() {
+    public String getLogLocation() {
         return logLocation;
     }
 
-    DocumentType getDocumentType() {
+    public DocumentType getDocumentType() {
         return documentType;
     }
 

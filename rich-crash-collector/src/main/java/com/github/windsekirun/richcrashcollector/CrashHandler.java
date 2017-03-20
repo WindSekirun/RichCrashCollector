@@ -7,6 +7,7 @@ import android.os.Build;
 
 import com.github.windsekirun.richcrashcollector.item.DocumentType;
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
+import com.github.windsekirun.richcrashcollector.item.RichCrashModel;
 
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -15,9 +16,6 @@ import org.commonmark.renderer.html.HtmlRenderer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 
 /**
  * RichCrashCollector
@@ -107,37 +105,32 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
         System.exit(10);
     }
 
+    private RichCrashModel generateRichCrashModel(Throwable ex) {
+        RichCrashModel richCrashModel = new RichCrashModel();
+        richCrashModel.setConfig(crashConfig);
+        richCrashModel.setDeviceInfo(new Build());
+        richCrashModel.setThrowable(ex);
+        richCrashModel.setTime(now.getTime(), crashConfig);
+        return richCrashModel;
+    }
+
     @SuppressWarnings("EmptyCatchBlock")
     @SuppressLint("InlinedApi")
     private String writeLogIntoMarkdown(Throwable ex) {
         StringBuilder builder = new StringBuilder();
-        SimpleDateFormat dateFormat = new SimpleDateFormat(crashConfig.getTimeFormat());
-
-        Writer result = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(result);
-        ex.printStackTrace(printWriter);
-
-        try {
-            Throwable cause = ex.getCause();
-            cause.printStackTrace(printWriter);
-        } catch (NullPointerException e) {
-        } finally {
-            printWriter.close();
-        }
-
-        String stackTrace = result.toString();
+        RichCrashModel richCrashModel = generateRichCrashModel(ex);
 
         builder.append("## Crash Log in ")
-                .append(crashConfig.getPackageName())
+                .append(richCrashModel.getPackageName())
                 .append(getLineBreak())
                 .append("### Application Info")
                 .append(getLineBreak())
                 .append("* Package Name: **")
-                .append(crashConfig.getPackageName())
+                .append(richCrashModel.getPackageName())
                 .append("**")
                 .append(getLineBreak())
                 .append("* Version: **")
-                .append(crashConfig.getVersionStr())
+                .append(richCrashModel.getVersionStr())
                 .append("**")
                 .append(getLineBreak())
                 .append(getLineBreak());
@@ -146,21 +139,21 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
             builder.append("### Device Info")
                     .append(getLineBreak())
                     .append("* Device: **")
-                    .append(Build.MODEL)
+                    .append(richCrashModel.getModelStr())
                     .append(" (a.k.a ")
-                    .append(Build.PRODUCT)
+                    .append(richCrashModel.getProductStr())
                     .append(" or ")
-                    .append(Build.DEVICE)
+                    .append(richCrashModel.getDeviceStr())
                     .append(")**")
                     .append(getLineBreak())
                     .append("* Version: **")
-                    .append(Build.VERSION.SDK)
+                    .append(richCrashModel.getSdkStr())
                     .append(" (")
-                    .append(Build.VERSION.SDK_INT)
+                    .append(richCrashModel.getSdkNum())
                     .append(")**")
                     .append(getLineBreak())
                     .append("* Manufacturer: **")
-                    .append(Build.MANUFACTURER)
+                    .append(richCrashModel.getManufacturerStr())
                     .append("**")
                     .append(getLineBreak())
                     .append(getLineBreak());
@@ -169,15 +162,15 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
         builder.append("### Crash Info")
                 .append(getLineBreak())
                 .append("* When: **")
-                .append(dateFormat.format(now.getTime()))
+                .append(richCrashModel.getTimeStr())
                 .append("**")
                 .append(getLineBreak())
                 .append("* Message: **")
-                .append(ex.getMessage())
+                .append(richCrashModel.getMessage())
                 .append("**")
                 .append(getLineBreak())
                 .append("* Localized Message: **")
-                .append(ex.getLocalizedMessage())
+                .append(richCrashModel.getLocalizedMessage())
                 .append("**")
                 .append(getLineBreak())
                 .append(getLineBreak());
@@ -187,7 +180,7 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
                     .append(getLineBreak())
                     .append("````")
                     .append(getLineBreak())
-                    .append(stackTrace)
+                    .append(richCrashModel.getStackTrace())
                     .append("````")
                     .append(getLineBreak())
                     .append(getLineBreak());
