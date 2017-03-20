@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.github.windsekirun.richcrashcollector.CrashCollector;
 import com.github.windsekirun.richcrashcollector.CrashConfig;
+import com.github.windsekirun.richcrashcollector.item.DocumentType;
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
 import com.github.windsekirun.richcrashcollector.utils.VersionStrUtils;
 
@@ -22,6 +23,7 @@ public class MainApplication extends Application {
                 .setLogLocation(getExternalFilesDir("crash").toString())
                 .setPackageName(getPackageName())
                 .setTimeFormat("yyyy-MM-dd (E) a hh:mm:ss.SSS")
+                .setDocumentType(DocumentType.MARKDOWN)
                 .setVersionStr(VersionStrUtils.getVersionStr(this))
                 .build(this);
 
