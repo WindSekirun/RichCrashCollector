@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
+import android.util.Log;
 
 import com.github.windsekirun.richcrashcollector.item.DocumentType;
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
@@ -17,6 +18,7 @@ import org.nustaq.serialization.FSTConfiguration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * RichCrashCollector
@@ -88,6 +90,8 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
         } else {
             messageBytes = message.getBytes();
         }
+
+        Log.d("messageBytes", Arrays.toString(messageBytes));
 
         FileOutputStream fos = null;
         try {

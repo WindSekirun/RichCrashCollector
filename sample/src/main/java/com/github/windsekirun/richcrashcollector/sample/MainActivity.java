@@ -1,11 +1,9 @@
 package com.github.windsekirun.richcrashcollector.sample;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnNull;
@@ -59,5 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 throw new ArrayIndexOutOfBoundsException("test");
             }
         });
+
     }
 }
