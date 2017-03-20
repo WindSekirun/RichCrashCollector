@@ -12,6 +12,7 @@ import com.github.windsekirun.richcrashcollector.item.RichCrashModel;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.nustaq.serialization.FSTConfiguration;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,9 +26,9 @@ import java.io.IOException;
 
 class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static CrashHandler instance;
-    private Thread.UncaughtExceptionHandler defaultExceptionHandler;
     private CrashConfig crashConfig;
     private Calendar now;
+    private RichCrashModel richCrashModel;
 
     static CrashHandler getInstance(CrashConfig config) {
         if (instance == null)
@@ -39,7 +40,6 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
     private CrashHandler(CrashConfig config) {
         this.crashConfig = config;
         now = Calendar.getInstance();
-        defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
     }
 
     @Override
@@ -53,10 +53,11 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
             return;
         }
 
+        richCrashModel = generateRichCrashModel(ex);
         new Thread() {
             @Override
             public void run() {
-                saveLocal(writeLogIntoMarkdown(ex));
+                saveLocal(writeLogIntoMarkdown());
             }
         }.start();
     }
@@ -81,6 +82,9 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
             Node document = parser.parse(message);
             HtmlRenderer renderer = HtmlRenderer.builder().build();
             messageBytes = renderer.render(document).getBytes();
+        } else if (crashConfig.getDocumentType() == DocumentType.JSON) {
+            FSTConfiguration conf = FSTConfiguration.createJsonConfiguration(true, false);
+            messageBytes = conf.asByteArray(richCrashModel);
         } else {
             messageBytes = message.getBytes();
         }
@@ -116,9 +120,8 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @SuppressWarnings("EmptyCatchBlock")
     @SuppressLint("InlinedApi")
-    private String writeLogIntoMarkdown(Throwable ex) {
+    private String writeLogIntoMarkdown() {
         StringBuilder builder = new StringBuilder();
-        RichCrashModel richCrashModel = generateRichCrashModel(ex);
 
         builder.append("## Crash Log in ")
                 .append(richCrashModel.getPackageName())
@@ -190,10 +193,19 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private String getFileName() {
-        if (crashConfig.getDocumentType() == DocumentType.HTML)
-            return "crash_" + getTimeForPrint() + ".html";
-        else
-            return "crash_" + getTimeForPrint() + ".md";
+            return "crash_" + getTimeForPrint() + getExtension();
+    }
+
+    private String getExtension() {
+        switch (crashConfig.getDocumentType()) {
+            default:
+            case MARKDOWN:
+                return ".md";
+            case HTML:
+                return ".html";
+            case JSON:
+                return ".json";
+        }
     }
 
     private static String getTimeForPrint() {

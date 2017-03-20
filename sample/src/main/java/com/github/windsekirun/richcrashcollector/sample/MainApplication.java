@@ -23,7 +23,7 @@ public class MainApplication extends Application {
                 .setLogLocation(getExternalFilesDir("crash").toString())
                 .setPackageName(getPackageName())
                 .setTimeFormat("yyyy-MM-dd (E) a hh:mm:ss.SSS")
-                .setDocumentType(DocumentType.MARKDOWN)
+                .setDocumentType(DocumentType.JSON)
                 .setVersionStr(VersionStrUtils.getVersionStr(this))
                 .build(this);
 

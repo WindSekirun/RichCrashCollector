@@ -7,5 +7,5 @@ package com.github.windsekirun.richcrashcollector.item;
  */
 
 public enum DocumentType {
-    MARKDOWN, HTML
+    MARKDOWN, HTML, JSON
 }
