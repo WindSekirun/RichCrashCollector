@@ -2,6 +2,7 @@ package com.github.windsekirun.richcrashcollector;
 
 import android.content.Context;
 
+import com.github.windsekirun.richcrashcollector.item.DocumentType;
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
 
 /**
@@ -18,6 +19,7 @@ public class CrashConfig {
     private String versionStr;
     private String packageName;
     private String logLocation;
+    private DocumentType documentType;
 
     String getPackageName() {
         return packageName;
@@ -43,6 +45,10 @@ public class CrashConfig {
         return logLocation;
     }
 
+    DocumentType getDocumentType() {
+        return documentType;
+    }
+
     private CrashConfig(Builder builder) {
         this.displayDeviceInfo = builder.displayDeviceInfo;
         this.logLevel = builder.logLevel;
@@ -50,6 +56,7 @@ public class CrashConfig {
         this.packageName = builder.packageName;
         this.versionStr = builder.versionStr;
         this.logLocation = builder.logLocation;
+        this.documentType = builder.documentType;
     }
 
     @SuppressWarnings({"ConstantConditions", "unused"})
@@ -60,6 +67,7 @@ public class CrashConfig {
         private String packageName = "com.github.windsekirun.richcrashcollector";
         private String versionStr = "1.0.0(1)";
         private String logLocation = null;
+        private DocumentType documentType = DocumentType.MARKDOWN;
 
         public Builder setDisplayDeviceInfo(boolean displayDeviceInfo) {
             this.displayDeviceInfo = displayDeviceInfo;
@@ -88,6 +96,11 @@ public class CrashConfig {
 
         public Builder setLogLocation(String logLocation) {
             this.logLocation = logLocation;
+            return this;
+        }
+
+        public Builder setDocumentType(DocumentType documentType) {
+            this.documentType = documentType;
             return this;
         }
 

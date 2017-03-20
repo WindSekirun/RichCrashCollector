@@ -5,7 +5,12 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 
+import com.github.windsekirun.richcrashcollector.item.DocumentType;
 import com.github.windsekirun.richcrashcollector.item.LogLevel;
+
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,10 +77,20 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         }
 
+        byte[] messageBytes;
+        if (crashConfig.getDocumentType() == DocumentType.HTML) {
+            Parser parser = Parser.builder().build();
+            Node document = parser.parse(message);
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
+            messageBytes = renderer.render(document).getBytes();
+        } else {
+            messageBytes = message.getBytes();
+        }
+
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file, true);
-            fos.write(message.getBytes());
+            fos.write(messageBytes);
             fos.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +197,10 @@ class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private String getFileName() {
-        return "crash_" + getTimeForPrint() + ".md";
+        if (crashConfig.getDocumentType() == DocumentType.HTML)
+            return "crash_" + getTimeForPrint() + ".html";
+        else
+            return "crash_" + getTimeForPrint() + ".md";
     }
 
     private static String getTimeForPrint() {
