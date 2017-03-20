@@ -16,7 +16,6 @@ Provide 'sample' module
 2. add repositories on module build.gradle
    ```` 
    repositories {
-    mavenCentral()
     flatDir {
         dirs 'aars'
     }
