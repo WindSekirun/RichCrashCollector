@@ -1,8 +1,6 @@
 package com.github.windsekirun.richcrashcollector;
 
 import android.annotation.SuppressLint;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.util.Log;
 
@@ -18,7 +16,9 @@ import org.nustaq.serialization.FSTConfiguration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * RichCrashCollector
