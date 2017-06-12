@@ -14,24 +14,24 @@ Provide 'sample' module
 ### Usages
 1. Download (or clone) project, copy rich-crash-collector.aar located /rich-crash-collector/aars file into /your_project_folder/app/arrs
 2. add repositories on module build.gradle
-   ```` 
+```` 
  allprojects {
 	repositories {
 		...
 		maven { url 'https://jitpack.io' }
 	}
-}
-    ````
+   } 
+````
 3. add compile on module build.gradle
-    ````
+````
     compile 'com.github.PyxisDev:RichCrashCollector:1.1.0'
-    ````
+````
 4. Initialize CrashCollector in Application class 
-   ````
+````
    CrashCollector.initCrashCollector(this);
-   ````
+````
    or
-   ````
+````
     CrashConfig config = new CrashConfig.Builder()
                 .setDisplayDeviceInfo(true)
                 .setLogLevel(LogLevel.STACKTRACE)
@@ -42,7 +42,7 @@ Provide 'sample' module
                 .build(this);
 
     CrashCollector.initCrashCollector(this, config);
-   ````
+````
 5. That's it! Crash log will saved in LogLocation.
 
 ### Document format
