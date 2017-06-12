@@ -6,14 +6,13 @@ Auto write crash-report documents (markdown) when app is force closed.
 * Generate code block of Stacktrace
 * Customize options to produce crash-report documents
 * Lightweight(11KB) library
-* Customize format of crash-report documents (Now support Markdown, HTML)
+* Customize format of crash-report documents
 
 ### Sample
 Provide 'sample' module
 
 ### Usages
-1. Download (or clone) project, copy rich-crash-collector.aar located /rich-crash-collector/aars file into /your_project_folder/app/arrs
-2. add repositories on module build.gradle
+1. add repositories on build.gradle of root project
 ```` 
  allprojects {
 	repositories {
@@ -22,11 +21,11 @@ Provide 'sample' module
 	}
    } 
 ````
-3. add compile on module build.gradle
+2. add compile on build.gradle of module project
 ````
     compile 'com.github.PyxisDev:RichCrashCollector:1.1.0'
 ````
-4. Initialize CrashCollector in Application class 
+3. Initialize CrashCollector in Application class 
 ````
    CrashCollector.initCrashCollector(this);
 ````
