@@ -15,15 +15,16 @@ Provide 'sample' module
 1. Download (or clone) project, copy rich-crash-collector.aar located /rich-crash-collector/aars file into /your_project_folder/app/arrs
 2. add repositories on module build.gradle
    ```` 
-   repositories {
-    flatDir {
-        dirs 'aars'
-    }
-   }
+ allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
     ````
 3. add compile on module build.gradle
     ````
-    compile 'com.github.windsekirun.richcrashcollector:rich-crash-collector:1.0.1@aar'
+    compile 'com.github.PyxisDev:RichCrashCollector:1.1.0'
     ````
 4. Initialize CrashCollector in Application class 
    ````
