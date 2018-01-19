@@ -1,3 +1,6 @@
+## Deprecated
+Please use CrashHandler in [RichUtilsKt](https://github.com/WindSekirun/RichUtilsKt), it interop with kotlin and java.
+
 ## RichCrashCollector
 Auto write crash-report documents (markdown) when app is force closed.
 
